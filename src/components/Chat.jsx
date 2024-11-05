@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Message from './Message';
 import '../styles/Chat.css';
 
 const Chat = () => {
   // State to hold messages
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
+  const [loadingTop, setLoadingTop] = useState(false);
+  const [loadingBottom, setLoadingBottom] = useState(false);
+
 
   const sendMessage = async (e) => {
     e.preventDefault();
-
     if (messageInput.trim()) {
       // Add user's message to the chat
       setMessages([...messages, { sender: "user", text: messageInput }]);
-
       try {
         const response = await axios.post("/api/chat", { message: messageInput });
-
         // Add the server's response to the chat
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -26,19 +27,53 @@ const Chat = () => {
         console.error("Error sending message:", error);
       }
 
-      // Clear the input field
       setMessageInput("");
+    }
+  };
+
+  // Infinite scroll - Load more messages when near top
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+
+    // Top Scroll: Load older messages
+    if (scrollTop === 0 && !loadingTop) {
+      setLoadingTop(true);
+
+      setTimeout(() => {
+        setMessages((prevMessages) => [
+          { sender: "bot", text: "Loaded older message 1" },
+          { sender: "bot", text: "Loaded older message 2" },
+          ...prevMessages
+        ]);
+        setLoadingTop(false);
+      }, 1000); // Simulate network delay
+    }
+
+    // Bottom Scroll: Load newer messages
+    if (scrollTop + clientHeight >= scrollHeight - 10 && !loadingBottom) {
+      setLoadingBottom(true);
+
+      setTimeout(() => {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", text: "Loaded newer message 1" },
+          { sender: "bot", text: "Loaded newer message 2" }
+        ]);
+        setLoadingBottom(false);
+      }, 1000); // Simulate network delay
     }
   };
 
   return (
     <div className="Chat">
-      <div className="message-container">
+      <div className="message-container" onScroll={handleScroll}>
+        {loadingTop && <div className="loading">Loading older messages...</div>}
+        
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
-            {message.text}
-          </div>
+          <Message key={index} sender={message.sender} text={message.text} />
         ))}
+
+        {loadingBottom && <div className="loading">Loading newer messages...</div>}
       </div>
       <form onSubmit={sendMessage}>
         <input 
