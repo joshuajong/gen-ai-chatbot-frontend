@@ -38,7 +38,7 @@ h1 {
 }
 
 .message.user {
-  background-color: #dcf8c6; /* User message background */
+  background-color: #b1b4f1; /* User message background */
   align-self: flex-end; /* Align user messages to the right */
 }
 
@@ -60,7 +60,7 @@ input {
 }
 
 input:focus {
-  border-color: #4CAF50; /* Highlight input border on focus */
+  border-color: #6a71fc; /* Highlight input border on focus */
 }
 
 button {
@@ -68,7 +68,7 @@ button {
   margin-left: 5px; /* Space between input and button */
   border: none; /* Remove default border */
   border-radius: 5px; /* Rounded corners */
-  background-color: #4CAF50; /* Button color */
+  background-color: #4b53fb; /* Button color */
   color: white; /* Button text color */
   cursor: pointer; /* Pointer cursor on hover */
 }
