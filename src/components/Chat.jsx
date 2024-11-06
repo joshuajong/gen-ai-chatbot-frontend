@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Message from './Message';
+import Suggestion from './Suggestion';
 import '../styles/Chat.css';
 
 const Chat = () => {
@@ -10,6 +11,9 @@ const Chat = () => {
   const [loadingTop, setLoadingTop] = useState(false);
   const [loadingBottom, setLoadingBottom] = useState(false);
   const [userScrolled, setUserScrolled] = useState(false); // New state to track user scroll
+
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const suggestions = ["Hello!", "Tell me a joke", "What's the weather?", "Help"];
 
   const messageEndRef = useRef(null);
   const messageStartRef = useRef(null);
@@ -35,13 +39,18 @@ const Chat = () => {
     }
   }, [loadingTop]);
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    if (messageInput.trim()) {
+  const sendMessage = async (message) => {
+    const finalMessage = message || messageInput;
+  
+    if (finalMessage.trim()) {
       // Add user's message to the chat
-      setMessages([...messages, { sender: "user", text: messageInput }]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "user", text: finalMessage }
+      ]);
+  
       try {
-        const response = await axios.post("/api/chat", { message: messageInput });
+        const response = await axios.post("/api/chat", { message: finalMessage });
         // Add the server's response to the chat
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -50,10 +59,16 @@ const Chat = () => {
       } catch (error) {
         console.error("Error sending message:", error);
       }
-
+  
+      // Clear the input field only if messageInput was used
       setMessageInput("");
+      setShowSuggestions(false);
       scrollToBottom();
     }
+  };
+  const handleSuggestionClick = (suggestion) => {
+    setMessageInput(suggestion);
+    sendMessage(suggestion);
   };
 
   // Infinite scroll - Load more messages when near top
@@ -104,6 +119,12 @@ const Chat = () => {
         {loadingBottom && <div className="loading">Loading newer messages...</div>}
         <div ref={messageEndRef} />
       </div>
+      {showSuggestions && (
+        <Suggestion 
+          suggestions={suggestions} 
+          onSuggestionClick={handleSuggestionClick} 
+        />
+      )}
       <form className="message-input-form" onSubmit={sendMessage}>
         <input 
           type="text" 

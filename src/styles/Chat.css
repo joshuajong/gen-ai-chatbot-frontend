@@ -25,6 +25,7 @@ h1 {
 
 
 .message-container {
+  height: calc(100% - 120px); /* Adjust height to fit within .Chat */
   max-height: calc(100% - 120px); /* Adjust height to fit within .Chat */
   width: 100%;
   margin: 0 auto 10px auto;
@@ -39,7 +40,7 @@ h1 {
 }
 
 .message {
-  margin: 5px 0; /* Space between messages */
+  margin: 10px 0; /* Space between messages */
   padding: 10px; /* Padding inside the message */
   border-radius: 15px; /* Rounded message corners */
   display: inline-block; /* Make the message bubble fit the text */
