@@ -1,16 +1,10 @@
-body {
-  font-family: Arial, sans-serif; /* Use a clean, readable font */
-  background-color: #f7f7f7; /* Light gray background for the page */
-  margin: 0;
-}
-
 .App {
-  max-width: 800px; /* Wider than before */
+  width: 75%;
+  height: 100vh;
   margin: 0 auto; /* Center the app */
-  padding: 20px; /* Add some padding */
-  background: white; /* White background for the chat area */
+  padding: 0px; /* Add some padding */
   border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow-y: hidden;
 }
 
 h1 {
@@ -18,16 +12,30 @@ h1 {
   color: #333; /* Dark text color */
 }
 
+.Chat {
+  background-color: #f7f7f7; /* Match the page background color */
+  border-radius: 8px;       /* Keep rounded corners */
+  padding: 20px;            /* Maintain padding */
+  margin: 0 auto;           /* Center the div horizontally */
+  height: calc(100% - 40px - 80px);
+  box-sizing: border-box;
+  position: relative;
+  /* Remove box-shadow if you want it to blend completely */
+}
+
+
 .message-container {
-  max-height: 500px; /* Limit height */
+  max-height: calc(100% - 120px); /* Adjust height to fit within .Chat */
+  width: 100%;
+  margin: 0 auto 10px auto;
   overflow-y: auto; /* Scrollable */
   padding: 10px;
+  padding-bottom: 60px; /* Add padding to accommodate the input form */
   display: flex; /* Use flexbox for layout */
   flex-direction: column; /* Stack messages vertically */
-  border: 1px solid #e0e0e0; /* Light border */
   border-radius: 8px; /* Rounded corners */
   margin-bottom: 10px; /* Space below */
-  background-color: #f9f9f9; /* Slightly off-white background */
+  overflow-y: auto;
 }
 
 .message {
@@ -40,14 +48,23 @@ h1 {
   width: fit-content; /* Ensure the message bubble fits the text */
 }
 
+.message-input-form {
+  margin-top: 20px;
+  bottom: 0;
+  width: 100%; /* Match the width of the .App or adjust as needed */
+  background-color: #f7f7f7;
+  margin-bottom: 20px;
+  /* display: flex; Ensure the input and button are aligned */
+}
+
 .message.user {
   background-color: #b1b4f1; /* User message background */
-  align-self: flex-start; /* Align user messages to the right */
+  align-self: flex-end; /* Align user messages to the right */
 }
 
 .message.bot {
   background-color: #f1f0f0; /* Bot message background */
-  align-self: flex-end; /* Align bot messages to the left */
+  align-self: flex-start; /* Align bot messages to the left */
 }
 
 form {
@@ -74,6 +91,7 @@ button {
   background-color: #4b53fb; /* Button color */
   color: white; /* Button text color */
   cursor: pointer; /* Pointer cursor on hover */
+  flex-shrink: 0; /* Prevent the button from shrinking */
 }
 
 button:hover {

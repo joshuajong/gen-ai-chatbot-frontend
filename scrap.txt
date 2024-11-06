@@ -1,0 +1,7 @@
+body {
+  font-family: Arial, sans-serif; /* Use a clean, readable font */
+  background-color: #f7f7f7; /* Light gray background for the page */
+  margin: 0;
+  overflow: hidden;
+  height: 100%;
+}

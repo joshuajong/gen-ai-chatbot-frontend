@@ -5,7 +5,7 @@ import './App.css'; // If you have global styles
 const App = () => {
   return (
     <div className="App">
-      <h1>Chatbot</h1> {/* Optional title */}
+      <h1>Chat with Us</h1> {/* Optional title */}
       <Chat />
     </div>
   );

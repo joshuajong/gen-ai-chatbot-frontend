@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Message from './Message';
 import '../styles/Chat.css';
@@ -9,7 +9,29 @@ const Chat = () => {
   const [messageInput, setMessageInput] = useState('');
   const [loadingTop, setLoadingTop] = useState(false);
   const [loadingBottom, setLoadingBottom] = useState(false);
+  
+  const messageEndRef = useRef(null);
+  const messageStartRef = useRef(null);
 
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToTop = () => {
+    messageStartRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (!loadingBottom) {
+      scrollToBottom();
+    }
+  }, [loadingBottom]);
+
+  useEffect(() => {
+    if (!loadingTop) {
+      scrollToTop();
+    }
+  }, [loadingTop]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -50,14 +72,13 @@ const Chat = () => {
     }
 
     // Bottom Scroll: Load newer messages
-    if (scrollTop + clientHeight >= scrollHeight - 10 && !loadingBottom) {
+    if (scrollTop + clientHeight >= scrollHeight - 50 && !loadingBottom) {
       setLoadingBottom(true);
 
       setTimeout(() => {
         setMessages((prevMessages) => [
           ...prevMessages,
-          { sender: "bot", text: "Loaded newer message 1" },
-          { sender: "bot", text: "Loaded newer message 2" }
+          { sender: "bot", text: "Loaded newer message 1" }
         ]);
         setLoadingBottom(false);
       }, 1000); // Simulate network delay
@@ -67,6 +88,7 @@ const Chat = () => {
   return (
     <div className="Chat">
       <div className="message-container" onScroll={handleScroll}>
+      <div ref={messageStartRef} />
         {loadingTop && <div className="loading">Loading older messages...</div>}
         
         {messages.map((message, index) => (
@@ -74,8 +96,9 @@ const Chat = () => {
         ))}
 
         {loadingBottom && <div className="loading">Loading newer messages...</div>}
+        <div ref={messageEndRef} />
       </div>
-      <form onSubmit={sendMessage}>
+      <form className="message-input-form" onSubmit={sendMessage}>
         <input 
           type="text" 
           value={messageInput} 
