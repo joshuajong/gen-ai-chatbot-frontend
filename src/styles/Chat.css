@@ -49,7 +49,7 @@ h1 {
 }
 
 .message-input-form {
-  margin-top: 20px;
+  margin-top: 10px;
   bottom: 0;
   width: 100%; /* Match the width of the .App or adjust as needed */
   background-color: #f7f7f7;

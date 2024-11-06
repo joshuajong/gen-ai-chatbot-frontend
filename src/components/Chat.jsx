@@ -9,12 +9,14 @@ const Chat = () => {
   const [messageInput, setMessageInput] = useState('');
   const [loadingTop, setLoadingTop] = useState(false);
   const [loadingBottom, setLoadingBottom] = useState(false);
-  
+  const [userScrolled, setUserScrolled] = useState(false); // New state to track user scroll
+
   const messageEndRef = useRef(null);
   const messageStartRef = useRef(null);
 
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setUserScrolled(false); // Reset user scroll flag after programmatic scroll
   };
 
   const scrollToTop = () => {
@@ -22,7 +24,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    if (!loadingBottom) {
+    if (!loadingBottom && !userScrolled) { // Check userScrolled flag
       scrollToBottom();
     }
   }, [loadingBottom]);
@@ -50,12 +52,16 @@ const Chat = () => {
       }
 
       setMessageInput("");
+      scrollToBottom();
     }
   };
 
   // Infinite scroll - Load more messages when near top
   const handleScroll = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
+
+    // Set userScrolled to true when user scrolls
+    setUserScrolled(true);
 
     // Top Scroll: Load older messages
     if (scrollTop === 0 && !loadingTop) {
@@ -72,7 +78,7 @@ const Chat = () => {
     }
 
     // Bottom Scroll: Load newer messages
-    if (scrollTop + clientHeight >= scrollHeight - 50 && !loadingBottom) {
+    if (scrollTop + clientHeight >= scrollHeight - 50 && !loadingBottom && userScrolled) {
       setLoadingBottom(true);
 
       setTimeout(() => {
