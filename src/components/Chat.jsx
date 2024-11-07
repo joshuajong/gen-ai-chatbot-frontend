@@ -119,12 +119,6 @@ const Chat = () => {
         {loadingBottom && <div className="loading">Loading newer messages...</div>}
         <div ref={messageEndRef} />
       </div>
-      {showSuggestions && (
-        <Suggestion 
-          suggestions={suggestions} 
-          onSuggestionClick={handleSuggestionClick} 
-        />
-      )}
       <form className="message-input-form" onSubmit={sendMessage}>
         <input 
           type="text" 
@@ -134,6 +128,12 @@ const Chat = () => {
         />
         <button type="submit">Send</button>
       </form>
+      {showSuggestions && (
+        <Suggestion 
+          suggestions={suggestions} 
+          onSuggestionClick={handleSuggestionClick} 
+        />
+      )}
     </div>
   );
 }

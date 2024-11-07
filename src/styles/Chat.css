@@ -17,7 +17,7 @@ h1 {
   border-radius: 8px;       /* Keep rounded corners */
   padding: 20px;            /* Maintain padding */
   margin: 0 auto;           /* Center the div horizontally */
-  height: calc(100% - 40px - 80px);
+  height: calc(100% - 40px - 100px);
   box-sizing: border-box;
   position: relative;
   /* Remove box-shadow if you want it to blend completely */
@@ -89,7 +89,7 @@ button {
   margin-left: 5px; /* Space between input and button */
   border: none; /* Remove default border */
   border-radius: 5px; /* Rounded corners */
-  background-color: #4b53fb; /* Button color */
+  background-color: #656cfc; /* Button color */
   color: white; /* Button text color */
   cursor: pointer; /* Pointer cursor on hover */
   flex-shrink: 0; /* Prevent the button from shrinking */
