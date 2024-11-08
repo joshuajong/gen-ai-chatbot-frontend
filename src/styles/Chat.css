@@ -13,34 +13,27 @@ h1 {
 }
 
 .Chat {
-  background-color: #f7f7f7; /* Match the page background color */
-  border-radius: 8px;       /* Keep rounded corners */
-  padding: 20px;            /* Maintain padding */
-  margin: 0 auto;           /* Center the div horizontally */
-  height: calc(100% - 40px - 100px);
+  display: flex;
+  flex-direction: column;
+  height: 80%; /* Full viewport height */
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 20px;
   box-sizing: border-box;
-  position: relative;
-  /* Remove box-shadow if you want it to blend completely */
 }
 
 
 .message-container {
-  height: calc(100% - 120px); /* Adjust height to fit within .Chat */
-  max-height: calc(100% - 120px); /* Adjust height to fit within .Chat */
-  width: 100%;
-  margin: 0 auto 10px auto;
-  overflow-y: auto; /* Scrollable */
-  padding: 10px;
-  padding-bottom: 60px; /* Add padding to accommodate the input form */
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Stack messages vertically */
-  border-radius: 8px; /* Rounded corners */
-  margin-bottom: 10px; /* Space below */
+  flex-grow: 1; /* Allow this to grow and take available space */
   overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
 }
 
 .message {
-  margin: 10px 0; /* Space between messages */
+  margin: 5px 0; /* Space between messages */
   padding: 10px; /* Padding inside the message */
   border-radius: 15px; /* Rounded message corners */
   display: inline-block; /* Make the message bubble fit the text */
@@ -50,7 +43,7 @@ h1 {
 }
 
 .message-input-form {
-  margin-top: 10px;
+  margin-top: 20px;
   bottom: 0;
   width: 100%; /* Match the width of the .App or adjust as needed */
   background-color: #f7f7f7;

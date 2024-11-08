@@ -7,11 +7,15 @@ import '../styles/Chat.css';
 const Chat = () => {
   // State to hold messages
   const [messages, setMessages] = useState([]);
+  // State to set message input
   const [messageInput, setMessageInput] = useState('');
+  // Temporary for loading older messages
   const [loadingTop, setLoadingTop] = useState(false);
+  // Temporary for loading newer messages
   const [loadingBottom, setLoadingBottom] = useState(false);
-  const [userScrolled, setUserScrolled] = useState(false); // New state to track user scroll
-
+  // State to check if user has scrolled
+  const [userScrolled, setUserScrolled] = useState(false);
+  // State to show suggestions at the start of the chat
   const [showSuggestions, setShowSuggestions] = useState(true);
   const suggestions = ["Hello!", "Tell me a joke", "What's the weather?", "Help"];
 
@@ -31,13 +35,18 @@ const Chat = () => {
     if (!loadingBottom && !userScrolled) { // Check userScrolled flag
       scrollToBottom();
     }
-  }, [loadingBottom]);
+  }, [loadingBottom, userScrolled]);
 
   useEffect(() => {
     if (!loadingTop) {
       scrollToTop();
     }
   }, [loadingTop]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(messageInput);
+  };
 
   const sendMessage = async (message) => {
     const finalMessage = message || messageInput;
@@ -66,6 +75,7 @@ const Chat = () => {
       scrollToBottom();
     }
   };
+
   const handleSuggestionClick = (suggestion) => {
     setMessageInput(suggestion);
     sendMessage(suggestion);
@@ -119,7 +129,7 @@ const Chat = () => {
         {loadingBottom && <div className="loading">Loading newer messages...</div>}
         <div ref={messageEndRef} />
       </div>
-      <form className="message-input-form" onSubmit={sendMessage}>
+      <form className="message-input-form" onSubmit={handleFormSubmit}>
         <input 
           type="text" 
           value={messageInput} 
