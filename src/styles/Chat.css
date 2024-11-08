@@ -15,7 +15,7 @@ h1 {
 .Chat {
   display: flex;
   flex-direction: column;
-  height: 80%; /* Full viewport height */
+  height: 85%; /* Full viewport height */
   background-color: #f7f7f7;
   border-radius: 8px;
   padding: 20px;
