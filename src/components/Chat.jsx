@@ -8,6 +8,8 @@ const Chat = () => {
   // Constants
   const MAX_MESSAGES = 10;
 
+  // State to check if waiting for bot reply
+  const [isTyping, setIsTyping] = useState(false);
   // State to hold messages
   const [messages, setMessages] = useState([]);
   // State to set message input
@@ -54,20 +56,26 @@ const Chat = () => {
         ...prevMessages,
         { sender: "user", text: finalMessage }
       ]);
+
+      // Show typing indicator
+      setIsTyping(true);
+
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", text: "..." }
+      ]);
   
       try {
         // Combine all previous messages and the final message into one string
         const fullMessage = messages.map(msg => msg.text).join(' ') + ' ' + finalMessage;
-
+        
         const apiHost = process.env.REACT_APP_BACKEND_API_HOST; // Access the environment variable
         const response = await axios.post(`${apiHost}/api/ask`, { message: fullMessage });
-
+        
         // Add the server's response to the chat
         setMessages((prevMessages) => {
-          const newMessages = [
-            ...prevMessages,
-            { sender: "bot", text: response.data.reply }
-          ];
+          const newMessages = prevMessages.slice(0, -1); // Remove the last "typing" message
+          newMessages.push({ sender: "bot", text: response.data.reply });
 
           // Check if the total number of messages has reached the limit
           if (newMessages.length >= MAX_MESSAGES) {
@@ -78,6 +86,11 @@ const Chat = () => {
         });
       } catch (error) {
         console.error("Error sending message:", error);
+        // Optionally handle the error by removing the typing indicator
+        setMessages((prevMessages) => prevMessages.slice(0, -1));
+      } finally {
+        // Hide typing indicator
+        setIsTyping(false);
       }
   
       // Clear the input field only if messageInput was used
@@ -99,6 +112,11 @@ const Chat = () => {
         
         <div ref={messageEndRef} />
       </div>
+      {isTyping && (
+        <div className="typing-indicator">
+          <Message sender="bot" text="..." />
+        </div>
+      )}
       {isLimitReached && (
         <div className="limit-message">
           You have exceeded the message limit. Please start a new session.
