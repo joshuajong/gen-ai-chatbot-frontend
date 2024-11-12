@@ -22,6 +22,11 @@ h1 {
   box-sizing: border-box;
 }
 
+.limit-message {
+  color: grey; /* Set text color to grey */
+  font-style: italic; /* Set font style to italic */
+  text-align: center; /* Center the text */
+}
 
 .message-container {
   flex-grow: 1; /* Allow this to grow and take available space */
