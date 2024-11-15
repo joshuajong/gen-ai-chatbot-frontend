@@ -8,8 +8,6 @@ const Chat = () => {
   // Constants
   const MAX_MESSAGES = 10;
 
-  // State to check if waiting for bot reply
-  const [isTyping, setIsTyping] = useState(false);
   // State to hold messages
   const [messages, setMessages] = useState([]);
   // State to set message input
@@ -18,10 +16,19 @@ const Chat = () => {
   const [isLimitReached, setIsLimitReached] = useState(false);
   // State to show suggestions at the start of the chat
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [generalContext, setGeneralContext] = useState(''); // State to hold general context
   const suggestions = ["Hello!", "Tell me a joke", "What's the weather?", "Help"];
 
   // Holds the bottom message for reference
   const messageEndRef = useRef(null);
+
+  // Fetch general context on component mount
+  useEffect(() => {
+    fetch('/general_context.txt')
+      .then(response => response.text())
+      .then(data => setGeneralContext(data))
+      .catch(error => console.error("Error fetching general context:", error));
+  }, []);
 
   // Add useEffect to scroll to bottom when messages change
   useEffect(() => {
@@ -57,23 +64,17 @@ const Chat = () => {
         { sender: "user", text: finalMessage }
       ]);
 
-      // Show typing indicator
-      setIsTyping(true);
-
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "bot", text: "..." }
       ]);
   
       try {
-        // Combine all previous messages and the final message into one string
-        const fullMessage = messages.map(msg => msg.text).join(' ') + ' ' + finalMessage;
+        // Combine general context, all previous messages, and the final message into one string
+        const fullMessage = generalContext + ' ' + messages.map(msg => msg.text).join(' ') + ' ' + finalMessage;
         
         const apiHost = process.env.REACT_APP_BACKEND_API_HOST; // Access the environment variable
         const response = await axios.post(`${apiHost}/api/ask`, { message: fullMessage }); 
-        // Simulate a delay of 4 seconds before setting the response
-        // await new Promise(resolve => setTimeout(resolve, 4000));
-        // const response = { "data": { "reply": "Hello, how can I help you today?" } }; 
         
         // Add the server's response to the chat
         setMessages((prevMessages) => {
@@ -91,11 +92,7 @@ const Chat = () => {
         console.error("Error sending message:", error);
         // Optionally handle the error by removing the typing indicator
         setMessages((prevMessages) => prevMessages.slice(0, -1));
-      } finally {
-        // Hide typing indicator
-        setIsTyping(false);
       }
-  
       // Clear the input field only if messageInput was used
       setShowSuggestions(false);
     }
