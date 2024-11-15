@@ -22,6 +22,9 @@ const Chat = () => {
   // Holds the bottom message for reference
   const messageEndRef = useRef(null);
 
+  // State to hold error messages
+  const [errorMessage, setErrorMessage] = useState('');
+
   // Fetch general context on component mount
   useEffect(() => {
     fetch('/general_context.txt')
@@ -76,9 +79,12 @@ const Chat = () => {
         const apiHost = process.env.REACT_APP_BACKEND_API_HOST; // Access the environment variable
         const response = await axios.post(`${apiHost}/api/ask`, { message: fullMessage }); 
         
+        // Clear any previous error message
+        setErrorMessage('');
+
         // Add the server's response to the chat
         setMessages((prevMessages) => {
-          const newMessages = prevMessages.slice(0, -1); // Remove the last "typing" message
+          const newMessages = prevMessages.slice(0, -1); // Remove the last "..." message
           newMessages.push({ sender: "bot", text: response.data.reply });
 
           // Check if the total number of messages has reached the limit
@@ -90,6 +96,8 @@ const Chat = () => {
         });
       } catch (error) {
         console.error("Error sending message:", error);
+        // Set the error message to display to the user
+        setErrorMessage('Failed to send message. Please try again later.');
         // Optionally handle the error by removing the typing indicator
         setMessages((prevMessages) => prevMessages.slice(0, -1));
       }
@@ -112,6 +120,13 @@ const Chat = () => {
         
         <div ref={messageEndRef} />
       </div>
+      
+      {/* Display error message if it exists */}
+      {errorMessage && (
+        <div className="error-message">
+          {errorMessage}
+        </div>
+      )}
       
       {isLimitReached && (
         <div className="limit-message">
