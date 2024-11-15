@@ -70,10 +70,10 @@ const Chat = () => {
         const fullMessage = messages.map(msg => msg.text).join(' ') + ' ' + finalMessage;
         
         const apiHost = process.env.REACT_APP_BACKEND_API_HOST; // Access the environment variable
-        // const response = await axios.post(`${apiHost}/api/ask`, { message: fullMessage }); 
+        const response = await axios.post(`${apiHost}/api/ask`, { message: fullMessage }); 
         // Simulate a delay of 4 seconds before setting the response
-        await new Promise(resolve => setTimeout(resolve, 4000));
-        const response = { "data": { "reply": "Hello, how can I help you today?" } }; 
+        // await new Promise(resolve => setTimeout(resolve, 4000));
+        // const response = { "data": { "reply": "Hello, how can I help you today?" } }; 
         
         // Add the server's response to the chat
         setMessages((prevMessages) => {
