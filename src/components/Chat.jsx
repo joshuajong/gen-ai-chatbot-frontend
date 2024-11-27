@@ -17,7 +17,7 @@ const Chat = () => {
   // State to show suggestions at the start of the chat
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [generalContext, setGeneralContext] = useState(''); // State to hold general context
-  const suggestions = ["What can you do?", "How long does shipping take?", "What is your refund policy?"];
+  const suggestions = ["What services do you offer?", "Are you hiring?", "Contact details"];
 
   // Holds the bottom message for reference
   const messageEndRef = useRef(null);
